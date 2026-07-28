@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A curated collection of meals and quick bites with one-click Walmart carts.">
+  <title>Cart & Table — Meal Planner</title>
+  <style>
+    :root {
+      --ink: #18352b;
+      --muted: #66756f;
+      --paper: #f8f6ef;
+      --card: #fffdf8;
+      --line: #dedfd5;
+      --green: #1f5a45;
+      --green-dark: #153f31;
+      --lime: #dcea87;
+      --blue: #0875d1;
+      --blue-dark: #005ca8;
+      --orange: #f3a44a;
+      --shadow: 0 18px 50px rgba(31, 60, 48, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 3%, rgba(220, 234, 135, 0.28), transparent 24rem),
+        radial-gradient(circle at 94% 20%, rgba(243, 164, 74, 0.15), transparent 26rem),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+      color: #fff;
+      background: rgba(21, 63, 49, 0.96);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: var(--green-dark);
+      background: var(--lime);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    }
+
+    .brand-mark svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .nav-meta {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 86px 0 72px;
+      color: #fff;
+      background: var(--green-dark);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 490px;
+      height: 490px;
+      top: -280px;
+      right: -80px;
+      border: 100px solid rgba(220, 234, 135, 0.08);
+      border-radius: 50%;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      right: 16%;
+      bottom: -200px;
+      border: 70px solid rgba(243, 164, 74, 0.1);
+      border-radius: 50%;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+      gap: 80px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 22px;
+      color: var(--lime);
+      font-size: 0.76rem;
+      font-weight: 850;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 24px;
+      height: 2px;
+      background: currentColor;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3rem, 7.4vw, 6.8rem);
+      font-weight: 500;
+      letter-spacing: -0.064em;
+      line-height: 0.9;
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      margin: 28px 0 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: clamp(1rem, 1.8vw, 1.18rem);
+    }
+
+    .hero-card {
+      padding: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.07);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.15);
+    }
+
+    .hero-card-label {
+      margin: 0 0 22px;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--lime);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2.35rem;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 6px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.82rem;
+    }
+
+    main {
+      padding: 54px 0 92px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(250px, 1fr) auto;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 44px;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      top: 50%;
+      left: 18px;
+      width: 20px;
+      height: 20px;
+      color: #75837e;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .search {
+      width: 100%;
+      height: 52px;
+      padding: 0 18px 0 50px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      outline: none;
+      color: var(--ink);
+      background: rgba(255, 253, 248, 0.88);
+      box-shadow: 0 8px 30px rgba(31, 60, 48, 0.04);
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .search:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(31, 90, 69, 0.12);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .filter {
+      min-height: 42px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #53645d;
+      background: rgba(255, 253, 248, 0.72);
+      cursor: pointer;
+      font-size: 0.84rem;
+      font-weight: 750;
+      transition: transform 150ms ease, color 150ms ease, border-color 150ms ease, background 150ms ease;
+    }
+
+    .filter:hover {
+      border-color: #aeb9b3;
+      transform: translateY(-1px);
+    }
+
+    .filter[aria-pressed="true"] {
+      border-color: var(--green);
+      color: #fff;
+      background: var(--green);
+    }
+
+    .category {
+      margin-top: 58px;
+    }
+
+    .category:first-child {
+      margin-top: 0;
+    }
+
+    .category-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 22px;
+    }
+
+    .category-kicker {
+      margin: 0 0 5px;
+      color: var(--category-accent, var(--green));
+      font-size: 0.72rem;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      font-weight: 500;
+      letter-spacing: -0.045em;
+      line-height: 1;
+    }
+
+    .category-summary {
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 650;
+      text-align: right;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .meal-card {
+      min-height: 282px;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--card);
+      box-shadow: 0 8px 26px rgba(31, 60, 48, 0.045);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .meal-card:hover {
+      border-color: #c6cbc1;
+      box-shadow: var(--shadow);
+      transform: translateY(-4px);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .index-badge {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: var(--green-dark);
+      background: var(--category-soft, #eef0df);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .price {
+      color: var(--ink);
+      font-size: 1.04rem;
+      font-weight: 850;
+      letter-spacing: -0.02em;
+    }
+
+    .meal-card h3 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.43rem;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+    }
+
+    .description {
+      min-height: 42px;
+      margin: 10px 0 18px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .card-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: auto;
+      color: #6f7f78;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .card-meta::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--category-accent, var(--green));
+    }
+
+    .cart-button {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 0 16px;
+      border-radius: 13px;
+      color: #fff;
+      background: var(--blue);
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-decoration: none;
+      transition: background 150ms ease, transform 150ms ease;
+    }
+
+    .cart-button:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    .cart-button:focus-visible,
+    .filter:focus-visible {
+      outline: 3px solid rgba(8, 117, 209, 0.3);
+      outline-offset: 3px;
+    }
+
+    .cart-button svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 74px 24px;
+      border: 1px dashed #b8c0b9;
+      border-radius: 24px;
+      color: var(--muted);
+      text-align: center;
+      background: rgba(255, 253, 248, 0.55);
+    }
+
+    .empty-state strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.6rem;
+    }
+
+    .site-footer {
+      padding: 30px 0 38px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .footer-row p {
+      margin: 0;
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 44px;
+      }
+
+      .hero-card {
+        max-width: 430px;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .filters {
+        justify-content: flex-start;
+      }
+
+      .card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .shell {
+        width: min(100% - 28px, 1180px);
+      }
+
+      .nav {
+        min-height: 64px;
+      }
+
+      .nav-meta {
+        display: none;
+      }
+
+      .hero {
+        padding: 64px 0 58px;
+      }
+
+      h1 {
+        font-size: clamp(3.25rem, 18vw, 5.2rem);
+      }
+
+      .toolbar {
+        margin-bottom: 34px;
+      }
+
+      .filters {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        scrollbar-width: none;
+      }
+
+      .filters::-webkit-scrollbar {
+        display: none;
+      }
+
+      .filter {
+        flex: 0 0 auto;
+      }
+
+      .category {
+        margin-top: 46px;
+      }
+
+      .category-heading {
+        align-items: start;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .category-summary {
+        text-align: left;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .meal-card {
+        min-height: 260px;
+      }
+
+      .footer-row {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell nav">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M5 8.5h14l-1.25 11h-11.5L5 8.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M9 9V6.8A3 3 0 0 1 12 4a3 3 0 0 1 3 2.8V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span>Cart &amp; Table</span>
+      </div>
+      <div class="nav-meta"><span id="navCount">22</span> cart-ready picks</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="shell hero-grid">
+      <div>
+        <p class="eyebrow">Simple meal planning</p>
+        <h1>Dinner ideas, one cart away.</h1>
+        <p class="hero-copy">Browse a practical collection of meals, quick bites, and prepared favorites. When something sounds good, send its ingredients straight to Walmart.</p>
+      </div>
+      <aside class="hero-card" aria-label="Collection overview">
+        <p class="hero-card-label">Inside this collection</p>
+        <div class="stats">
+          <div class="stat">
+            <strong id="mealCount">22</strong>
+            <span>meal ideas</span>
+          </div>
+          <div class="stat">
+            <strong id="categoryCount">4</strong>
+            <span>collections</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <main id="menu" class="shell">
+    <div class="toolbar">
+      <label class="search-wrap">
+        <span class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Search meal ideas</span>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/>
+          <path d="m16 16 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <input id="search" class="search" type="search" placeholder="Search meals and ingredients…" autocomplete="off">
+      </label>
+      <div id="filters" class="filters" aria-label="Filter by category"></div>
+    </div>
+
+    <div id="menuSections"></div>
+    <div id="emptyState" class="empty-state" role="status">
+      <strong>No meals found</strong>
+      Try another search or choose a different collection.
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-row">
+      <p>Built from the MenuTest meal planner.</p>
+      <p>Prices are estimates from the source sheet and may change at Walmart.</p>
+    </div>
+  </footer>
+
+  <script>
+    const menuItems = [
+      {
+        category: "Meals",
+        name: "Bacon, Egg & Cheese Hash",
+        description: "Add a tortilla for a burrito or an English muffin for a breakfast sandwich.",
+        price: 12.83,
+        skus: ["15754220", "145051970", "47360083", "10452562"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=15754220,145051970,47360083,10452562"
+      },
+      {
+        category: "Meals",
+        name: "Pork Loin & Mashed Potatoes",
+        description: "A hearty plate rounded out with vegetables.",
+        price: 10.13,
+        skus: ["256880581", "10312430", "54049493"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=256880581,10312430,54049493"
+      },
+      {
+        category: "Meals",
+        name: "Chicken Pita",
+        description: "A quick, filling pita—just add your favorite sauce.",
+        price: 13.23,
+        skus: ["177167579", "14091466089", "14664700"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=177167579,14091466089,14664700"
+      },
+      {
+        category: "Meals",
+        name: "Beef Noodle Stir-Fry",
+        description: "Savory beef noodles with an easy frozen vegetable mix.",
+        price: 19.21,
+        skus: ["1888939985", "562723596", "980539185", "23591152"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=1888939985,562723596,980539185,23591152"
+      },
+      {
+        category: "Meals",
+        name: "Birria Chicken Tacos",
+        description: "A convenient taco kit finished with melty cheese.",
+        price: 16.22,
+        skus: ["19705614362", "14330060501", "106764433"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=19705614362,14330060501,106764433"
+      },
+      {
+        category: "Meals",
+        name: "Salmon & Veggies",
+        description: "A simple protein-forward dinner with vegetables.",
+        price: 21.84,
+        skus: ["1469077193", "883217982"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=1469077193,883217982"
+      },
+      {
+        category: "Meals",
+        name: "BBQ Chicken",
+        description: "A classic barbecue chicken dinner with easy sides.",
+        price: 15.37,
+        skus: ["50067993", "2163283694", "409008803", "46908368"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=50067993,2163283694,409008803,46908368"
+      },
+      {
+        category: "Quick Bites",
+        name: "Turkey & Cheddar Lunchables",
+        description: "A grab-and-go snack with turkey and cheddar.",
+        price: 1.68,
+        skus: ["10534987"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=10534987"
+      },
+      {
+        category: "Quick Bites",
+        name: "Pasta Roni Angel Hair",
+        description: "A fast, comforting pasta side or light meal.",
+        price: 1.40,
+        skus: ["10318341"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=10318341"
+      },
+      {
+        category: "Quick Bites",
+        name: "Protein Pasta Marinara",
+        description: "A pantry-friendly pasta with extra protein.",
+        price: 2.97,
+        skus: ["650921984"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=650921984"
+      },
+      {
+        category: "Quick Bites",
+        name: "Ham Lunchables",
+        description: "Walmart's convenient ham and cracker snack pack.",
+        price: 1.50,
+        skus: ["5512418077"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=5512418077"
+      },
+      {
+        category: "Quick Bites",
+        name: "Taquitos",
+        description: "Crispy, savory bites for an easy snack or meal.",
+        price: 7.87,
+        skus: ["2752211380"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=2752211380"
+      },
+      {
+        category: "Quick Bites",
+        name: "Red Dragon Fruit Smoothie Mix",
+        description: "Blend into a smoothie or stir into oatmeal.",
+        price: 2.97,
+        skus: ["5395277931"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=5395277931"
+      },
+      {
+        category: "Quick Bites",
+        name: "Shredded Chicken Lentil Bowl",
+        description: "A hearty ready-to-eat bowl with chicken and lentils.",
+        price: 4.92,
+        skus: ["19168601881"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=19168601881"
+      },
+      {
+        category: "Quick Bites",
+        name: "Cherries",
+        description: "A fresh, naturally sweet snack.",
+        price: 5.63,
+        skus: ["46491694"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=46491694"
+      },
+      {
+        category: "Prepared Meals",
+        name: "Bertolli Chicken Florentine",
+        description: "A creamy frozen skillet meal with chicken and spinach.",
+        price: 10.77,
+        skus: ["313263803"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=313263803"
+      },
+      {
+        category: "Prepared Meals",
+        name: "Birds Eye Garlic Chicken Voila",
+        description: "Garlic chicken, pasta, and vegetables in one skillet.",
+        price: 3.87,
+        skus: ["10790949"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=10790949"
+      },
+      {
+        category: "Prepared Meals",
+        name: "Chicken Shawarma Kit",
+        description: "A ready-to-cook kit packed with warm shawarma flavor.",
+        price: 8.86,
+        skus: ["20072471096"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=20072471096"
+      },
+      {
+        category: "Prepared Meals",
+        name: "Pesto Skillet",
+        description: "An easy skillet meal with bright basil pesto.",
+        price: 6.36,
+        skus: ["18430307699"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=18430307699"
+      },
+      {
+        category: "Prepared Meals",
+        name: "Margherita Pizza",
+        description: "Tomato, mozzarella, and basil on a crisp crust.",
+        price: 6.92,
+        skus: ["5463970979"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=5463970979"
+      },
+      {
+        category: "Prepared Meals",
+        name: "Lemon Alfredo Skillet",
+        description: "Creamy Alfredo balanced with a bright lemon finish.",
+        price: 6.36,
+        skus: ["18420852866"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=18420852866"
+      },
+      {
+        category: "Fresh Staples",
+        name: "Mexican Toppings",
+        description: "Red onion, cilantro, and jalapeño for tacos, bowls, and more.",
+        price: null,
+        skus: ["51259215", "160597260", "44391018"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=51259215,160597260,44391018"
+      }
+    ];
+
+    const categoryStyles = {
+      "Meals": { accent: "#1f5a45", soft: "#dfeadb", kicker: "Cook something good" },
+      "Quick Bites": { accent: "#d47a2a", soft: "#f9e6cf", kicker: "Fast & easy" },
+      "Prepared Meals": { accent: "#4f62a8", soft: "#e3e7f5", kicker: "Heat, serve, enjoy" },
+      "Fresh Staples": { accent: "#7a8e2d", soft: "#edf1d1", kicker: "Finish it fresh" }
+    };
+
+    const categories = Object.keys(categoryStyles);
+    const searchInput = document.querySelector("#search");
+    const filters = document.querySelector("#filters");
+    const sections = document.querySelector("#menuSections");
+    const emptyState = document.querySelector("#emptyState");
+    let activeCategory = "All";
+
+    const escapeHTML = (value) =>
+      String(value).replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[character]);
+
+    const currency = (value) =>
+      value === null
+        ? "Price varies"
+        : new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
+
+    const externalIcon = `
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M14 5h5v5M19 5l-7 7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`;
+
+    function renderFilters() {
+      filters.innerHTML = ["All", ...categories].map((category) => `
+        <button
+          class="filter"
+          type="button"
+          data-category="${escapeHTML(category)}"
+          aria-pressed="${category === activeCategory}">
+          ${escapeHTML(category)}
+        </button>
+      `).join("");
+    }
+
+    function renderMenu() {
+      const query = searchInput.value.trim().toLowerCase();
+      const visible = menuItems.filter((item) => {
+        const matchesCategory = activeCategory === "All" || item.category === activeCategory;
+        const searchText = `${item.name} ${item.description} ${item.category}`.toLowerCase();
+        return matchesCategory && searchText.includes(query);
+      });
+
+      sections.innerHTML = categories.map((category) => {
+        const items = visible.filter((item) => item.category === category);
+        if (!items.length) return "";
+
+        const style = categoryStyles[category];
+        const pricedItems = items.filter((item) => item.price !== null);
+        const subtotal = pricedItems.reduce((sum, item) => sum + item.price, 0);
+        const priceSummary = pricedItems.length
+          ? `${items.length} ${items.length === 1 ? "pick" : "picks"} · ${currency(subtotal)} total`
+          : `${items.length} ${items.length === 1 ? "pick" : "picks"} · market price`;
+
+        return `
+          <section
+            class="category"
+            aria-labelledby="${category.replace(/\s+/g, "-").toLowerCase()}-title"
+            style="--category-accent:${style.accent};--category-soft:${style.soft}">
+            <div class="category-heading">
+              <div>
+                <p class="category-kicker">${escapeHTML(style.kicker)}</p>
+                <h2 id="${category.replace(/\s+/g, "-").toLowerCase()}-title">${escapeHTML(category)}</h2>
+              </div>
+              <div class="category-summary">${priceSummary}</div>
+            </div>
+            <div class="card-grid">
+              ${items.map((item, index) => `
+                <article class="meal-card">
+                  <div class="card-top">
+                    <span class="index-badge">${String(index + 1).padStart(2, "0")}</span>
+                    <span class="price">${currency(item.price)}</span>
+                  </div>
+                  <h3>${escapeHTML(item.name)}</h3>
+                  <p class="description">${escapeHTML(item.description)}</p>
+                  <div class="card-meta">${item.skus.length} ${item.skus.length === 1 ? "item" : "items"} in cart</div>
+                  <a
+                    class="cart-button"
+                    href="${escapeHTML(item.url)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open ${escapeHTML(item.name)} cart at Walmart">
+                    <span>Open Walmart cart</span>
+                    ${externalIcon}
+                  </a>
+                </article>
+              `).join("")}
+            </div>
+          </section>
+        `;
+      }).join("");
+
+      emptyState.style.display = visible.length ? "none" : "block";
+      document.querySelector("#navCount").textContent = visible.length;
+    }
+
+    filters.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-category]");
+      if (!button) return;
+      activeCategory = button.dataset.category;
+      renderFilters();
+      renderMenu();
+    });
+
+    searchInput.addEventListener("input", renderMenu);
+
+    document.querySelector("#mealCount").textContent = menuItems.length;
+    document.querySelector("#categoryCount").textContent = categories.length;
+    renderFilters();
+    renderMenu();
+  </script>
+</body>
+</html>
