@@ -421,6 +421,29 @@
       background: var(--category-accent, var(--green));
     }
 
+    .recipe-link {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      gap: 6px;
+      margin-top: 10px;
+      color: var(--category-accent, var(--green));
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
+
+    .recipe-link:hover {
+      opacity: 0.75;
+    }
+
+    .recipe-link svg {
+      width: 14px;
+      height: 14px;
+      flex: 0 0 auto;
+    }
+
     .cart-button {
       min-height: 46px;
       display: flex;
@@ -473,6 +496,124 @@
       font-size: 1.6rem;
     }
 
+    .schedule {
+      margin: 78px 0 24px;
+      padding: 40px 0 8px;
+      border-top: 1px solid var(--line);
+    }
+
+    .schedule-heading {
+      max-width: 640px;
+      margin-bottom: 30px;
+    }
+
+    .schedule-heading h2 {
+      margin: 0 0 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      letter-spacing: -0.02em;
+    }
+
+    .schedule-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .night-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .night-card {
+      display: flex;
+      flex-direction: column;
+      padding: 20px 20px 22px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .night-badge {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      gap: 7px;
+      margin-bottom: 10px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      color: var(--green-dark);
+      background: var(--lime);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .night-card h3 {
+      margin: 0 0 6px;
+      font-size: 1.12rem;
+      letter-spacing: -0.01em;
+    }
+
+    .night-note {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .night-label {
+      margin: 0 0 6px;
+      color: #6f7f78;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .night-list {
+      margin: 0 0 14px;
+      padding-left: 18px;
+      color: var(--ink);
+      font-size: 0.85rem;
+    }
+
+    .night-list li {
+      margin-bottom: 3px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: auto;
+    }
+
+    .chip {
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--green);
+      background: #f1f4ec;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .accompaniments {
+      margin-top: 20px;
+      padding: 18px 22px;
+      border: 1px dashed #b8c0b9;
+      border-radius: 20px;
+      background: rgba(255, 253, 248, 0.55);
+      font-size: 0.86rem;
+    }
+
+    .accompaniments strong {
+      color: var(--green-dark);
+    }
+
     .site-footer {
       padding: 30px 0 38px;
       border-top: 1px solid var(--line);
@@ -509,6 +650,10 @@
       }
 
       .card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .night-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
@@ -568,6 +713,10 @@
       }
 
       .card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .night-grid {
         grid-template-columns: 1fr;
       }
 
@@ -653,6 +802,137 @@
     </div>
   </main>
 
+  <section id="schedule" class="schedule shell" aria-labelledby="schedule-title">
+    <div class="schedule-heading">
+      <h2 id="schedule-title">Meal schedule</h2>
+      <p>A rotating plan of nine dinners. Cook one a night, repeat the ones that work, and lean on the accompaniments to round out the plate.</p>
+    </div>
+    <div class="night-grid">
+        <article class="night-card">
+          <span class="night-badge">1st Night</span>
+          <h3>Pasta &amp; Sauce</h3>
+          <p class="night-note">Pesto, butter, or parm — pick the sauce and go.</p>
+          <p class="night-label">Ingredients</p>
+          <ul class="night-list">
+            <li>1 lb pasta</li>
+            <li>Cheese</li>
+            <li>Parm</li>
+            <li>Sauce</li>
+            <li>Frozen meatballs</li>
+          </ul>
+        </article>
+        <article class="night-card">
+          <span class="night-badge">2nd Night</span>
+          <h3>Pizza Night</h3>
+          <p class="night-note">Use naan or flatbread for easiness, or a frozen dough ball.</p>
+          <p class="night-label">Ingredients</p>
+          <ul class="night-list">
+            <li>Pasta sauce or pesto</li>
+            <li>Cheese</li>
+            <li>Naan or dough</li>
+            <li>Pepperoni or shaved ham</li>
+          </ul>
+        </article>
+        <article class="night-card">
+          <span class="night-badge">3rd Night</span>
+          <h3>Chicken Cutlets &amp; Lemon Sauce</h3>
+          <p class="night-note">Make a big batch and freeze through the week for air frying.</p>
+          <p class="night-label">Ingredients</p>
+          <ul class="night-list">
+            <li>Chicken</li>
+            <li>Flour</li>
+            <li>Egg</li>
+            <li>Breadcrumbs</li>
+            <li>Oil</li>
+            <li>Parm</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">Sandwiches</span>
+            <span class="chip">Salads</span>
+            <span class="chip">Wraps</span>
+          </div>
+        </article>
+        <article class="night-card">
+          <span class="night-badge">4th Night</span>
+          <h3>Frozen Meal</h3>
+          <p class="night-note">Chicken Voila, Zatarain's, or whatever is in the freezer.</p>
+          <p class="night-label">Ingredients</p>
+          <ul class="night-list">
+            <li>Frozen meal</li>
+          </ul>
+        </article>
+        <article class="night-card">
+          <span class="night-badge">5th Night</span>
+          <h3>Air-Fried Pork Tenderloin &amp; Instant Mash</h3>
+          <p class="night-note">Fast main with a five-minute side.</p>
+          <p class="night-label">Ingredients</p>
+          <ul class="night-list">
+            <li>Pork tenderloin</li>
+            <li>Instant mash</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">American</span>
+            <span class="chip">Asian (with rice or fried rice)</span>
+          </div>
+        </article>
+        <article class="night-card">
+          <span class="night-badge">6th Night</span>
+          <h3>Slow Cooker Pork</h3>
+          <p class="night-note">Start it in the morning, shred it at dinner.</p>
+          <p class="night-label">Ingredients</p>
+          <ul class="night-list">
+            <li>Pork shoulder</li>
+            <li>Bottle of mojo</li>
+            <li>Tortillas</li>
+            <li>Mexican cheese</li>
+            <li>Toppings</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">Mexican</span>
+            <span class="chip">BBQ</span>
+            <span class="chip">Pot roast</span>
+          </div>
+        </article>
+        <article class="night-card">
+          <span class="night-badge">7th Night</span>
+          <h3>Air-Fried Salmon</h3>
+          <p class="night-note">Minimal prep, plate with whatever sides are around.</p>
+          <p class="night-label">Ingredients</p>
+          <ul class="night-list">
+            <li>Salmon</li>
+          </ul>
+        </article>
+        <article class="night-card">
+          <span class="night-badge">8th Night</span>
+          <h3>Arroz Con Pollo</h3>
+          <p class="night-note">Build it from fajita chicken you cook or a rotisserie bird.</p>
+          <p class="night-label">Ingredients</p>
+          <ul class="night-list">
+            <li>Fajita chicken or rotisserie chicken</li>
+            <li>Can of beans</li>
+            <li>Spanish rice packet</li>
+            <li>Tub of queso</li>
+          </ul>
+        </article>
+        <article class="night-card">
+          <span class="night-badge">9th Night</span>
+          <h3>Breakfast for Dinner</h3>
+          <p class="night-note">Hash, omelettes, bacon, sausage — dealer's choice.</p>
+          <p class="night-label">Ingredients</p>
+          <ul class="night-list">
+            <li>Toast</li>
+            <li>Egg</li>
+            <li>Bacon</li>
+            <li>Bell pepper</li>
+          </ul>
+        </article>
+    </div>
+    <p class="accompaniments">
+      <strong>Accompaniments:</strong>
+      Frozen roasted veggies to sauté, salad mix, bell peppers.
+    </p>
+  </section>
+
   <footer class="site-footer">
     <div class="shell footer-row">
       <p>Built from the MenuTest meal planner.</p>
@@ -717,6 +997,39 @@
         price: 15.37,
         skus: ["50067993", "2163283694", "409008803", "46908368"],
         url: "https://www.walmart.com/sc/cart/addToCart?items=50067993,2163283694,409008803,46908368"
+      },
+      {
+        category: "Meals",
+        name: "Pesto Ravioli",
+        description: "Ravioli tossed in pesto—use the Sam's Club pesto for the best flavor.",
+        price: null,
+        skus: ["5902160195"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=5902160195"
+      },
+      {
+        category: "Meals",
+        name: "Ramen",
+        description: "A quick noodle bowl you can dress up with whatever is in the fridge.",
+        price: null,
+        skus: ["993192980", "325918992"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=993192980,325918992"
+      },
+      {
+        category: "Meals",
+        name: "Barbacoa Tacos",
+        description: "Slow-cooked beef chuck roast shredded for tacos, with toppings.",
+        price: null,
+        skus: ["8386854802", "10452562", "13424766", "10415222"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=8386854802,10452562,13424766,10415222",
+        recipeUrl: "https://www.gimmesomeoven.com/barbacoa-recipe/"
+      },
+      {
+        category: "Meals",
+        name: "Pork Tenderloin Steakhouse",
+        description: "Steakhouse-style pork tenderloin for an easy main.",
+        price: null,
+        skus: ["131070657"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=131070657"
       },
       {
         category: "Quick Bites",
@@ -833,10 +1146,10 @@
       {
         category: "Fresh Staples",
         name: "Mexican Toppings",
-        description: "Red onion, cilantro, and jalapeño for tacos, bowls, and more.",
+        description: "Red onion, Lime, cilantro, and jalapeño for tacos, bowls, and more.",
         price: null,
-        skus: ["51259215", "160597260", "44391018"],
-        url: "https://www.walmart.com/sc/cart/addToCart?items=51259215,160597260,44391018"
+        skus: ["51259215", "160597260", "44391018", "44391008_2"],
+        url: "https://www.walmart.com/sc/cart/addToCart?items=51259215,160597260,44391018,44391008_2"
       }
     ];
 
@@ -927,6 +1240,17 @@
                   <h3>${escapeHTML(item.name)}</h3>
                   <p class="description">${escapeHTML(item.description)}</p>
                   <div class="card-meta">${item.skus.length} ${item.skus.length === 1 ? "item" : "items"} in cart</div>
+                  ${item.recipeUrl ? `
+                    <a
+                      class="recipe-link"
+                      href="${escapeHTML(item.recipeUrl)}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="View the ${escapeHTML(item.name)} recipe">
+                      <span>View recipe</span>
+                      ${externalIcon}
+                    </a>
+                  ` : ""}
                   <a
                     class="cart-button"
                     href="${escapeHTML(item.url)}"
